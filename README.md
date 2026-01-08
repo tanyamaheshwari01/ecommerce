@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛍️ E-Commerce Storefront (Frontend)
 
-## Getting Started
+A modern, responsive e-commerce storefront built using **Next.js**, **React**, and **TypeScript**.  
+This project focuses on frontend architecture, API integration, state management, and user experience.
 
-First, run the development server:
+---
+
+## 🚀 Tech Stack
+
+- **Next.js (App Router)**
+- **React**
+- **TypeScript**
+- **Context API** (Global State)
+- **REST API Integration**
+- **CSS (Inline styles)**
+
+---
+
+## 🎯 Features
+
+### 🛒 Product Catalog
+- Fetches products from a public REST API
+- Displays products in a responsive grid
+- Shows:
+  - Product image
+  - Title
+  - Price
+  - Category
+  - Rating
+
+### 🔍 Search
+- Search products by name
+- Case-insensitive search using `includes()`
+- Displays “No products found” message for empty results
+
+### 🧩 Filters & Sorting
+- Filter products by category
+- Sort products by:
+  - Price (Low → High)
+  - Price (High → Low)
+  - Rating
+
+### 📄 Product Details
+- Dynamic product detail page
+- Product image
+- Description
+- Rating display
+
+### 🛒 Cart (Frontend Only)
+- Add / remove products
+- Increase / decrease quantity
+- Cart summary with total items & total price
+- Cart data persists using `localStorage`
+
+### ⚠️ Error & Empty States
+- Handles API loading and error states
+- Displays user-friendly messages
+- Custom 404 page for invalid routes
+
+### 📱 Responsive Design
+- Fully responsive for mobile, tablet, and desktop
+- Flexible grid layout using CSS Grid
+
+---
+
+## 🧠 State Management
+
+- **Context API** is used for:
+  - Cart state
+  - Search state
+- Avoids prop drilling
+- Clean and scalable architecture
+
+---
+
+## 📂 Pages
+
+- `/` → Home / Product Listing
+- `/product/[id]` → Product Details Page
+- `/cart` → Cart Page
+- `not-found.tsx` → Custom 404 Page
+
+---
+
+## 🧪 Handling Edge Cases
+
+- Invalid URL → **404 Page Not Found**
+- Search with no results → **“No products found”**
+- API failure → **Error message shown**
+- Empty cart → Graceful UI state
+
+---
+
+## 🛠️ Installation & Run Locally
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/ecommerce-storefront.git
+
+# Go to project directory
+cd ecommerce-storefront
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
