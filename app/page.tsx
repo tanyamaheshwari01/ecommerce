@@ -1,66 +1,78 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import { getProducts } from "@/lib/api";
+import { Product } from "@/types/product";
+import ProductCard from "@/components/ProductCard";
+import HeroBanner from "@/components/HeroBanner";
+import FilterBar from "@/components/FilterBar";
+
+export default function HomePage() {
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [category, setCategory] = useState("");
+  const [sort, setSort] = useState("");
+
+  console.log("HOME PAGE LOADED");
+
+  useEffect(() => {
+    getProducts().then(setProducts);
+  }, []);
+
+  // ✅ categories for dropdown
+  const categories = Array.from(new Set(products.map(p => p.category)));
+
+  // ✅ STEP 1: filter
+  let filteredProducts = category
+    ? products.filter(p => p.category === category)
+    : products;
+
+  // ✅ STEP 2: sort
+  if (sort === "price-asc") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => a.price - b.price
+    );
+  }
+
+  if (sort === "price-desc") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => b.price - a.price
+    );
+  }
+
+  if (sort === "rating-desc") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => b.rating.rate - a.rating.rate
+    );
+  }
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div style={{ padding: "0 40px" }}>
+      <h1>Discover Products</h1>
+      <p>Browse our curated collection of quality products</p>
+
+      <HeroBanner />
+
+      <FilterBar
+        categories={categories}
+        category={category}
+        sort={sort}
+        setCategory={setCategory}
+        setSort={setSort}
+      />
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 20,
+        }}
+      >
+        {filteredProducts.map(p => (
+          <ProductCard key={p.id} product={p} />
+        ))}
+      </div>
     </div>
   );
 }
