@@ -1,11 +1,8 @@
-import "./globals.css";
+"use client";
+
 import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/context/CartContext";
-
-export const metadata = {
-  title: "E-Commerce Store",
-  description: "Modern e-commerce storefront built with Next.js",
-};
+import { SearchProvider } from "@/context/SearchContext";
 
 export default function RootLayout({
   children,
@@ -16,8 +13,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <CartProvider>
-          <Navbar />
-          {children}
+          <SearchProvider>
+            <Navbar />
+            {children}
+          </SearchProvider>
         </CartProvider>
       </body>
     </html>
