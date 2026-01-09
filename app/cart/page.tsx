@@ -14,23 +14,23 @@ export default function CartPage() {
   }
 
   return (
-   
     <div style={{ padding: "48px" }}>
+      {/* Navigation back to home */}
       <Link
-  href="/"
-  style={{
-    display: "inline-block",
-    marginBottom: "20px",
-    padding: "10px 16px",
-    borderRadius: "8px",
-    background: "#30276cff",
-    color: "#fff",
-    textDecoration: "none",
-    fontSize: "14px",
-  }}
->
-  ← Back to Home
-</Link>
+        href="/"
+        style={{
+          display: "inline-block",
+          marginBottom: "20px",
+          padding: "10px 16px",
+          borderRadius: "8px",
+          background: "#30276cff",
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "14px",
+        }}
+      >
+        ← Back to Home
+      </Link>
 
       <h1 style={{ marginBottom: 32 }}>My Cart</h1>
 
@@ -42,6 +42,7 @@ export default function CartPage() {
           alignItems: "flex-start",
         }}
       >
+        {/* Cart items list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {cart.map((item) => (
             <div
@@ -79,6 +80,7 @@ export default function CartPage() {
                   ₹ {item.price}
                 </div>
 
+                {/* Quantity controls */}
                 <div
                   style={{
                     display: "inline-flex",
@@ -101,6 +103,7 @@ export default function CartPage() {
                   </button>
                 </div>
 
+                {/* Remove item button */}
                 <button
                   onClick={() => removeFromCart(item.id)}
                   style={{
@@ -124,6 +127,7 @@ export default function CartPage() {
           ))}
         </div>
 
+        {/* Order summary sidebar */}
         <div
           style={{
             background: "#05057aff",

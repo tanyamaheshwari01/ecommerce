@@ -15,24 +15,29 @@ export default function HomePage() {
 
   const { search } = useSearch();
 
+  // Fetch products 
   useEffect(() => {
     getProducts().then(setProducts);
   }, []);
 
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
+  // Filter products by search query
   let filtered = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Apply category filter
   if (category) {
     filtered = filtered.filter((p) => p.category === category);
   }
 
+  // Apply sorting
   if (sort === "price-asc") filtered.sort((a, b) => a.price - b.price);
   if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
   if (sort === "rating-desc")
     filtered.sort((a, b) => b.rating.rate - a.rating.rate);
+
   return (
     <div
       style={{
@@ -48,6 +53,7 @@ export default function HomePage() {
 
       <HeroBanner />
 
+      {/* Filter controls */}
       <FilterBar
         categories={categories}
         category={category}
@@ -56,6 +62,7 @@ export default function HomePage() {
         setSort={setSort}
       />
 
+      {/* Product grid */}
       <div
         style={{
           display: "grid",

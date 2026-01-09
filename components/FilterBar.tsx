@@ -21,6 +21,7 @@ export default function FilterBar({
         margin: "30px 0",
       }}
     >
+      {/* Category filter dropdown */}
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
@@ -38,6 +39,7 @@ export default function FilterBar({
         ))}
       </select>
 
+      {/* Sort options dropdown */}
       <select
         value={sort}
         onChange={(e) => setSort(e.target.value)}

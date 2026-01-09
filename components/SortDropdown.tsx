@@ -4,7 +4,7 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
 }
-
+//sort menu
 export default function SortDropdown({ value, onChange }: Props) {
   return (
     <select value={value} onChange={e => onChange(e.target.value)}>

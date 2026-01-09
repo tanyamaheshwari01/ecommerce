@@ -11,6 +11,7 @@ export default function Navbar() {
   const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
+    // Header container 
     <header
       style={{
         display: "flex",
@@ -26,6 +27,7 @@ export default function Navbar() {
     >
       <h2 style={{ color: "#120c3f" }}>🛍️ ShopEase</h2>
 
+      {/* Search input */}
       <input
         placeholder="Search products..."
         value={search}
@@ -40,23 +42,24 @@ export default function Navbar() {
         }}
       />
 
+      {/* Cart button with item count */}
       <div style={{ display: "flex", gap: 20 }}>
         <button
           style={{
-        background: "#120c3f",
-        color: "#ffffff",
-        border: "none",
-        padding: "10px 16px",
-        borderRadius: "8px",
-        fontSize: "15px",
-        fontWeight: "600",
-        cursor: "pointer",
-        transition: "all 0.3s ease",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            background: "#120c3f",
+            color: "#ffffff",
+            border: "none",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            fontSize: "15px",
+            fontWeight: "600",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Link href="/cart" style={{ textDecoration: "none", color: "inherit" }}>
-        🛒 {totalQty}
+            🛒 {totalQty}
           </Link>
         </button>
       </div>

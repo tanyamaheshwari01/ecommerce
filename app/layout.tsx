@@ -14,6 +14,7 @@ export default function RootLayout({
       <body>
         <CartProvider>
           <SearchProvider>
+            {/* Navigation bar */}
             <Navbar />
             {children}
           </SearchProvider>

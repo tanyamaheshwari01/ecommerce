@@ -1,5 +1,6 @@
 export default function HeroBanner() {
   return (
+    // Main banner container
     <div
       style={{
         margin: "30px 0",
@@ -12,12 +13,14 @@ export default function HeroBanner() {
         alignItems: "center",
       }}
     >
+      {/* Text content section */}
       <div>
         <h1>Big Savings Day 🎉</h1>
         <p>
           Up to <b>50% OFF</b> on top products
         </p>
 
+        {/* shop now button */}
         <button
           style={{
             marginTop: 20,
@@ -31,6 +34,7 @@ export default function HeroBanner() {
         </button>
       </div>
 
+      {/* Sale icon image */}
       <img
         src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
         alt="sale"

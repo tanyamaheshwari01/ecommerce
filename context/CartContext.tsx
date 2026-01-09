@@ -15,18 +15,22 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | null>(null);
 
+// Cart Provider component
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
 
+  // Load cart from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem("cart");
     if (stored) setCart(JSON.parse(stored));
   }, []);
 
+  // Save cart to localStorage 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  // Add product to cart
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const item = prev.find((p) => p.id === product.id);
@@ -39,12 +43,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Increase quantity of a cart item
   const increaseQty = (id: number) => {
     setCart((prev) =>
       prev.map((p) => (p.id === id ? { ...p, quantity: p.quantity + 1 } : p))
     );
   };
 
+  // Decrease quantity of a cart item
   const decreaseQty = (id: number) => {
     setCart((prev) =>
       prev
@@ -53,6 +59,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  // Remove item from cart
   const removeFromCart = (id: number) => {
     setCart((prev) => prev.filter((p) => p.id !== id));
   };
@@ -66,6 +73,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Custom hook to use the Cart Context
 export const useCart = () => {
   const ctx = useContext(CartContext);
   if (!ctx) {

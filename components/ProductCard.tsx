@@ -15,6 +15,7 @@ export default function ProductCard({ product }: Props) {
   const quantity = cartItem?.quantity || 0;
 
   return (
+    // Card container
     <div
       style={{
         background: "#fff",
@@ -23,11 +24,10 @@ export default function ProductCard({ product }: Props) {
         boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
         display: "flex",
         flexDirection: "column",
-        height: "100%", // 🔴 critical
-        overflow: "hidden", // 🔴 prevents overlap
+        height: "100%", 
+        overflow: "hidden", 
       }}
     >
-      {/* IMAGE */}
       <div
         style={{
           height: "180px",
@@ -51,7 +51,7 @@ export default function ProductCard({ product }: Props) {
         />
       </div>
 
-      {/* CONTENT */}
+      {/* Product details */}
       <div style={{ flexGrow: 1 }}>
         <h3
           style={{
@@ -67,12 +67,12 @@ export default function ProductCard({ product }: Props) {
           {product.title}
         </h3>
 
-        {/* PRICE */}
+        {/* Price */}
         <p style={{ fontSize: "16px", fontWeight: 700 }}>
           ₹ {product.price}
         </p>
 
-        {/* RATING */}
+        {/* Rating */}
         <div
           style={{
             display: "flex",
@@ -99,7 +99,7 @@ export default function ProductCard({ product }: Props) {
         </Link>
       </div>
 
-      {/* CART */}
+      {/* Add to cart / Quantity controls */}
       <div style={{ marginTop: "12px" }}>
         {quantity === 0 ? (
           <button
