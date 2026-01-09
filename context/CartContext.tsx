@@ -28,10 +28,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart]);
 
   const addToCart = (product: Product) => {
-    setCart(prev => {
-      const item = prev.find(p => p.id === product.id);
+    setCart((prev) => {
+      const item = prev.find((p) => p.id === product.id);
       if (item) {
-        return prev.map(p =>
+        return prev.map((p) =>
           p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
         );
       }
@@ -40,25 +40,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const increaseQty = (id: number) => {
-    setCart(prev =>
-      prev.map(p =>
-        p.id === id ? { ...p, quantity: p.quantity + 1 } : p
-      )
+    setCart((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, quantity: p.quantity + 1 } : p))
     );
   };
 
   const decreaseQty = (id: number) => {
-    setCart(prev =>
+    setCart((prev) =>
       prev
-        .map(p =>
-          p.id === id ? { ...p, quantity: p.quantity - 1 } : p
-        )
-        .filter(p => p.quantity > 0)
+        .map((p) => (p.id === id ? { ...p, quantity: p.quantity - 1 } : p))
+        .filter((p) => p.quantity > 0)
     );
   };
 
   const removeFromCart = (id: number) => {
-    setCart(prev => prev.filter(p => p.id !== id));
+    setCart((prev) => prev.filter((p) => p.id !== id));
   };
 
   return (

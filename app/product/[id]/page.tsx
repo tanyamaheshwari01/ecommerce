@@ -39,7 +39,6 @@ export default function ProductDetail() {
         alignItems: "center",
       }}
     >
-      {/* LEFT – IMAGE */}
       <div style={{ textAlign: "center" }}>
         <img
           src={product.image}
@@ -51,7 +50,6 @@ export default function ProductDetail() {
         />
       </div>
 
-      {/* RIGHT – DETAILS */}
       <div>
         <h1 style={{ fontSize: "28px", marginBottom: "10px" }}>
           {product.title}
@@ -67,9 +65,7 @@ export default function ProductDetail() {
           {product.description}
         </p>
 
-        <p style={{ marginBottom: "20px" }}>
-          ⭐ {product.rating.rate} / 5
-        </p>
+        <p style={{ marginBottom: "20px" }}>⭐ {product.rating.rate} / 5</p>
 
         <button
           onClick={() => addToCart(product)}

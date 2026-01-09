@@ -14,7 +14,9 @@ export default function HeroBanner() {
     >
       <div>
         <h1>Big Savings Day 🎉</h1>
-        <p>Up to <b>50% OFF</b> on top products</p>
+        <p>
+          Up to <b>50% OFF</b> on top products
+        </p>
 
         <button
           style={{

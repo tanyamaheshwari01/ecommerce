@@ -1,22 +1,37 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
+import Link from "next/link";
 
 export default function CartPage() {
   const { cart, increaseQty, decreaseQty, removeFromCart } = useCart();
 
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-  const totalPrice = cart.reduce(
-    (s, i) => s + i.price * i.quantity,
-    0
-  );
+  const totalPrice = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
   if (cart.length === 0) {
     return <h2 style={{ padding: 40 }}>Your cart is empty</h2>;
   }
 
   return (
+   
     <div style={{ padding: "48px" }}>
+      <Link
+  href="/"
+  style={{
+    display: "inline-block",
+    marginBottom: "20px",
+    padding: "10px 16px",
+    borderRadius: "8px",
+    background: "#30276cff",
+    color: "#fff",
+    textDecoration: "none",
+    fontSize: "14px",
+  }}
+>
+  ← Back to Home
+</Link>
+
       <h1 style={{ marginBottom: 32 }}>My Cart</h1>
 
       <div
@@ -27,9 +42,8 @@ export default function CartPage() {
           alignItems: "flex-start",
         }}
       >
-        {/* LEFT SIDE – CART ITEMS */}
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {cart.map(item => (
+          {cart.map((item) => (
             <div
               key={item.id}
               style={{
@@ -42,7 +56,6 @@ export default function CartPage() {
                 boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
               }}
             >
-              {/* IMAGE */}
               <img
                 src={item.image}
                 alt={item.title}
@@ -53,11 +66,8 @@ export default function CartPage() {
                 }}
               />
 
-              {/* DETAILS */}
               <div>
-                <div style={{ fontWeight: 600 }}>
-                  {item.title}
-                </div>
+                <div style={{ fontWeight: 600 }}>{item.title}</div>
 
                 <div
                   style={{
@@ -69,7 +79,6 @@ export default function CartPage() {
                   ₹ {item.price}
                 </div>
 
-                {/* QUANTITY PILL */}
                 <div
                   style={{
                     display: "inline-flex",
@@ -81,19 +90,13 @@ export default function CartPage() {
                     padding: "4px 10px",
                   }}
                 >
-                  <button
-                    onClick={() => decreaseQty(item.id)}
-                    style={qtyBtn}
-                  >
+                  <button onClick={() => decreaseQty(item.id)} style={qtyBtn}>
                     −
                   </button>
 
                   <span>{item.quantity}</span>
 
-                  <button
-                    onClick={() => increaseQty(item.id)}
-                    style={qtyBtn}
-                  >
+                  <button onClick={() => increaseQty(item.id)} style={qtyBtn}>
                     +
                   </button>
                 </div>
@@ -114,7 +117,6 @@ export default function CartPage() {
                 </button>
               </div>
 
-              {/* ITEM TOTAL */}
               <div style={{ fontWeight: 600 }}>
                 ₹ {(item.price * item.quantity).toFixed(2)}
               </div>
@@ -122,7 +124,6 @@ export default function CartPage() {
           ))}
         </div>
 
-        {/* RIGHT SIDE – ORDER SUMMARY */}
         <div
           style={{
             background: "#05057aff",
@@ -175,7 +176,6 @@ export default function CartPage() {
   );
 }
 
-/* BUTTON STYLE */
 const qtyBtn = {
   background: "transparent",
   border: "none",

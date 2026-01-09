@@ -13,17 +13,14 @@ export default function HomePage() {
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
 
-  // ✅ GLOBAL SEARCH FROM NAVBAR
   const { search } = useSearch();
 
   useEffect(() => {
     getProducts().then(setProducts);
   }, []);
 
-  // ✅ categories
-  const categories = Array.from(new Set(products.map(p => p.category)));
+  const categories = Array.from(new Set(products.map((p) => p.category)));
 
-  // ✅ FILTER + SEARCH
   let filtered = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -36,61 +33,53 @@ export default function HomePage() {
   if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
   if (sort === "rating-desc")
     filtered.sort((a, b) => b.rating.rate - a.rating.rate);
-return (
-  <div
-  style={{
-    padding: "0 40px",
-    maxWidth: "1280px",
-    margin: "0 auto",
-  }}
->
-
-    {/* ✅ PAGE HEADING (RESTORED) */}
-    <h1 style={{ marginTop: "24px" }}>Discover Products</h1>
-    <p style={{ marginBottom: "24px", color: "#555" }}>
-      Browse our curated collection of quality products
-    </p>
-
-    {/* ✅ HERO BANNER */}
-    <HeroBanner />
-
-    {/* ✅ FILTER BAR */}
-    <FilterBar
-      categories={categories}
-      category={category}
-      sort={sort}
-      setCategory={setCategory}
-      setSort={setSort}
-    />
-
-    {/* ✅ PRODUCT GRID */}
-    <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-    gap: 24,
-    marginTop: "24px",
-  }}
->
-  {filtered.length === 0 ? (
+  return (
     <div
       style={{
-        gridColumn: "1 / -1",
-        textAlign: "center",
-        padding: "60px 0",
-        color: "#555",
+        padding: "0 40px",
+        maxWidth: "1280px",
+        margin: "0 auto",
       }}
     >
-      <h3 style={{ marginBottom: "8px" }}>
-        No products found
-      </h3>
-      <p>Try a different search or clear filters</p>
+      <h1 style={{ marginTop: "24px" }}>Discover Products</h1>
+      <p style={{ marginBottom: "24px", color: "#555" }}>
+        Browse our curated collection of quality products
+      </p>
+
+      <HeroBanner />
+
+      <FilterBar
+        categories={categories}
+        category={category}
+        sort={sort}
+        setCategory={setCategory}
+        setSort={setSort}
+      />
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gap: 24,
+          marginTop: "24px",
+        }}
+      >
+        {filtered.length === 0 ? (
+          <div
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center",
+              padding: "60px 0",
+              color: "#555",
+            }}
+          >
+            <h3 style={{ marginBottom: "8px" }}>No products found</h3>
+            <p>Try a different search or clear filters</p>
+          </div>
+        ) : (
+          filtered.map((p) => <ProductCard key={p.id} product={p} />)
+        )}
+      </div>
     </div>
-  ) : (
-    filtered.map((p) => (
-      <ProductCard key={p.id} product={p} />
-    ))
-  )}
-</div>
-</div>
-)}
+  );
+}
