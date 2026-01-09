@@ -15,19 +15,19 @@ export default function ProductCard({ product }: Props) {
   const quantity = cartItem?.quantity || 0;
 
   return (
-    // Card container
     <div
       style={{
         background: "#fff",
         borderRadius: "16px",
-        padding: "6px",
+        padding: "16px",
         boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
         display: "flex",
         flexDirection: "column",
-        height: "100%", 
-        overflow: "hidden", 
+        height: "100%", // 🔴 critical
+        overflow: "hidden", // 🔴 prevents overlap
       }}
     >
+      {/* IMAGE */}
       <div
         style={{
           height: "180px",
@@ -36,7 +36,7 @@ export default function ProductCard({ product }: Props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: "4px",
+          marginBottom: "12px",
           overflow: "hidden",
         }}
       >
@@ -51,7 +51,7 @@ export default function ProductCard({ product }: Props) {
         />
       </div>
 
-      {/* Product details */}
+      {/* CONTENT */}
       <div style={{ flexGrow: 1 }}>
         <h3
           style={{
@@ -67,12 +67,12 @@ export default function ProductCard({ product }: Props) {
           {product.title}
         </h3>
 
-        {/* Price */}
+        {/* PRICE */}
         <p style={{ fontSize: "16px", fontWeight: 700 }}>
           ₹ {product.price}
         </p>
 
-        {/* Rating */}
+        {/* RATING */}
         <div
           style={{
             display: "flex",
@@ -99,7 +99,7 @@ export default function ProductCard({ product }: Props) {
         </Link>
       </div>
 
-      {/* Add to cart / Quantity controls */}
+      {/* CART */}
       <div style={{ marginTop: "12px" }}>
         {quantity === 0 ? (
           <button
@@ -110,7 +110,7 @@ export default function ProductCard({ product }: Props) {
               background: "#09052b",
               color: "#fff",
               border: "none",
-              borderRadius: "15px",
+              borderRadius: "12px",
               cursor: "pointer",
               fontSize: "15px",
             }}

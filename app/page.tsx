@@ -20,6 +20,7 @@ export default function HomePage() {
     getProducts().then(setProducts);
   }, []);
 
+  // categories from products
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
   // Filter products by search query
@@ -51,6 +52,7 @@ export default function HomePage() {
         Browse our curated collection of quality products
       </p>
 
+      {/* Hero banner section */}
       <HeroBanner />
 
       {/* Filter controls */}

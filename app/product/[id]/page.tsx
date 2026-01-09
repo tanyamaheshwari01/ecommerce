@@ -2,90 +2,93 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getProduct } from "@/lib/api";
+import { getProductById } from "@/lib/api";
 import { Product } from "@/types/product";
 import { useCart } from "@/context/CartContext";
 
-export default function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
-  const { addToCart } = useCart();
+export default function ProductDetailsPage() {
+  const params = useParams();
+  const id = Number(params.id); 
 
+  const { addToCart } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch product data 
   useEffect(() => {
     if (!id) return;
 
-    getProduct(id)
-      .then(setProduct)
+    getProductById(id)
+      .then((data) => setProduct(data))
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) {
-    return <p style={{ padding: 40 }}>Loading product...</p>;
-  }
-
-  if (!product) {
-    return <p style={{ padding: 40 }}>Product not found</p>;
-  }
+  if (loading) return <p style={{ padding: 40 }}>Loading...</p>;
+  if (!product) return <p style={{ padding: 40 }}>Product not found</p>;
 
   return (
     <div
       style={{
-        padding: "60px",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "60px",
-        alignItems: "center",
+        maxWidth: "900px",
+        margin: "40px auto",
+        padding: "0 20px",
       }}
     >
-      {/* Product Image */}
-      <div style={{ textAlign: "center" }}>
+      {/* IMAGE */}
+      <div
+        style={{
+          height: "420px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: "30px",
+        }}
+      >
         <img
           src={product.image}
           alt={product.title}
           style={{
-            maxHeight: "420px",
+            maxHeight: "100%",
+            maxWidth: "100%",
             objectFit: "contain",
           }}
         />
       </div>
 
-      {/* Product Details */}
-      <div>
-        <h1 style={{ fontSize: "28px", marginBottom: "10px" }}>
-          {product.title}
-        </h1>
+      {/* DETAILS BELOW */}
+      <h1 style={{ fontSize: "28px", marginBottom: "10px" }}>
+        {product.title}
+      </h1>
 
-        <p style={{ color: "#6b7280", marginBottom: "10px" }}>
-          Category: {product.category}
-        </p>
+      <p style={{ color: "#666", marginBottom: "10px" }}>
+        Category: {product.category}
+      </p>
 
-        <h2 style={{ marginBottom: "15px" }}>₹ {product.price}</h2>
+      <p style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "16px" }}>
+        ₹ {product.price}
+      </p>
 
-        <p style={{ marginBottom: "20px", lineHeight: 1.6 }}>
-          {product.description}
-        </p>
+      <p style={{ lineHeight: "1.7", marginBottom: "20px" }}>
+        {product.description}
+      </p>
 
-        <p style={{ marginBottom: "20px" }}>⭐ {product.rating.rate} / 5</p>
-
-        {/* Add to Cart Button */}
-        <button
-          onClick={() => addToCart(product)}
-          style={{
-            padding: "12px 24px",
-            background: "#6C5CE7",
-            color: "#fff",
-            border: "none",
-            borderRadius: "10px",
-            fontSize: "16px",
-            cursor: "pointer",
-          }}
-        >
-          Add to Cart
-        </button>
+      <div style={{ marginBottom: "24px" }}>
+        ⭐ {product.rating.rate} / 5 ({product.rating.count} reviews)
       </div>
+
+      <button
+        onClick={() => addToCart(product)}
+        style={{
+          padding: "14px 28px",
+          background: "#6C5CE7",
+          color: "#fff",
+          border: "none",
+          borderRadius: "12px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        Add to Cart
+      </button>
     </div>
   );
 }
