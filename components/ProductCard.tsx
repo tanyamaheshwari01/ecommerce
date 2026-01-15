@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Product } from "@/types/product";
 import { useCart } from "@/context/CartContext";
+import Image from "next/image";
 
 type Props = {
   product: Product;
@@ -23,8 +24,8 @@ export default function ProductCard({ product }: Props) {
         boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
         display: "flex",
         flexDirection: "column",
-        height: "100%", // 🔴 critical
-        overflow: "hidden", // 🔴 prevents overlap
+        height: "100%",
+        overflow: "hidden",
       }}
     >
       {/* IMAGE */}
@@ -40,7 +41,9 @@ export default function ProductCard({ product }: Props) {
           overflow: "hidden",
         }}
       >
-        <img
+        <Image
+          width={200}
+          height={200}
           src={product.image}
           alt={product.title}
           style={{
@@ -68,9 +71,7 @@ export default function ProductCard({ product }: Props) {
         </h3>
 
         {/* PRICE */}
-        <p style={{ fontSize: "16px", fontWeight: 700 }}>
-          ₹ {product.price}
-        </p>
+        <p style={{ fontSize: "16px", fontWeight: 700 }}>₹ {product.price}</p>
 
         {/* RATING */}
         <div
@@ -82,9 +83,7 @@ export default function ProductCard({ product }: Props) {
           }}
         >
           <span style={{ color: "#facc15" }}>⭐</span>
-          <span style={{ fontSize: "14px" }}>
-            {product.rating.rate}
-          </span>
+          <span style={{ fontSize: "14px" }}>{product.rating.rate}</span>
         </div>
 
         <Link
@@ -138,7 +137,7 @@ export default function ProductCard({ product }: Props) {
                 cursor: "pointer",
               }}
             >
-              −
+              -
             </button>
 
             <span style={{ fontWeight: 600 }}>{quantity}</span>

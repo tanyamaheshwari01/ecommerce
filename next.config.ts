@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fakestoreapi.com',
+        port: '',
+        pathname: '/img/**', // Specifically allow the /img directory
+      },
+    ],
+  },
 };
 
 export default nextConfig;
