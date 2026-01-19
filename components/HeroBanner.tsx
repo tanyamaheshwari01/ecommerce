@@ -24,6 +24,7 @@ export default function HeroBanner() {
 
         {/* shop now button */}
         <button
+        suppressHydrationWarning
           style={{
             marginTop: 20,
             padding: "10px 20px",

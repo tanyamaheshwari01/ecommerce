@@ -1,3 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+
+import { useEffect, useState } from "react";
+
 type FilterBarProps = {
   categories: string[];
   category: string;
@@ -13,6 +18,15 @@ export default function FilterBar({
   setCategory,
   setSort,
 }: FilterBarProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!mounted) return null;
+
   return (
     <div
       style={{
@@ -23,6 +37,7 @@ export default function FilterBar({
     >
       {/* Category filter dropdown */}
       <select
+        suppressHydrationWarning
         value={category}
         onChange={(e) => setCategory(e.target.value)}
         style={{
@@ -41,6 +56,7 @@ export default function FilterBar({
 
       {/* Sort options dropdown */}
       <select
+        suppressHydrationWarning
         value={sort}
         onChange={(e) => setSort(e.target.value)}
         style={{
