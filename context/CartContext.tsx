@@ -17,13 +17,10 @@ const CartContext = createContext<CartContextType | null>(null);
 
 // Cart Provider component
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
+  const [cart, setCart] = useState<CartItem[]>(() => {
     const stored = localStorage.getItem("cart");
-    if (stored) setCart(JSON.parse(stored));
-  }, []);
+    return stored ? JSON.parse(stored) : [];
+  });
 
   // Save cart to localStorage 
   useEffect(() => {

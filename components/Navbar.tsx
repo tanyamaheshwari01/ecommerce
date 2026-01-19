@@ -8,10 +8,9 @@ export default function Navbar() {
   const { cart } = useCart();
   const { search, setSearch } = useSearch();
 
-  const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalQty = cart?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
   return (
-    // Header container 
     <header
       style={{
         display: "flex",
@@ -27,28 +26,35 @@ export default function Navbar() {
     >
       <h2 style={{ color: "#120c3f" }}>🛍️ ShopEase</h2>
 
+      <input
+        suppressHydrationWarning
+        placeholder="Search products..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{
+          width: "45%",
+          padding: "12px 18px",
+          borderRadius: "999px",
+          border: "1px solid #e5e7eb",
+          outline: "none",
+          fontSize: "15px",
+        }}
+      />
 
-      {/* Cart button with item count */}
-      <div style={{ display: "flex", gap: 20 }}>
-        <button
-          style={{
-            background: "#120c3f",
-            color: "#ffffff",
-            border: "none",
-            padding: "10px 16px",
-            borderRadius: "8px",
-            fontSize: "15px",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <Link href="/cart" style={{ textDecoration: "none", color: "inherit" }}>
-            🛒 {totalQty}
-          </Link>
-        </button>
-      </div>
+      <Link
+        href="/cart"
+        style={{
+          background: "#120c3f",
+          color: "#ffffff",
+          padding: "10px 16px",
+          borderRadius: "8px",
+          fontSize: "15px",
+          fontWeight: "600",
+          textDecoration: "none",
+        }}
+      >
+        🛒 {totalQty}
+      </Link>
     </header>
   );
 }
