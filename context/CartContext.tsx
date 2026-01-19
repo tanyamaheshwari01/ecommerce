@@ -20,7 +20,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [mounted, setMounted] = useState(false);
 
-  // ✅ Read localStorage ONLY on client
+  //   localStorage ONLY on client
   useEffect(() => {
     setMounted(true);
 
@@ -30,7 +30,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // ✅ Save cart after mount
+  //  Save cart after mount
   useEffect(() => {
     if (!mounted) return;
     localStorage.setItem("cart", JSON.stringify(cart));

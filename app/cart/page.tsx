@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function CartPage() {
@@ -57,12 +58,12 @@ export default function CartPage() {
                 boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
               }}
             >
-              <img
+              <Image
                 src={item.image}
                 alt={item.title}
+                height={70}
+                width={70}
                 style={{
-                  height: 70,
-                  width: 70,
                   objectFit: "contain",
                 }}
               />
@@ -93,7 +94,7 @@ export default function CartPage() {
                   }}
                 >
                   <button onClick={() => decreaseQty(item.id)} style={qtyBtn}>
-                    −
+                    
                   </button>
 
                   <span>{item.quantity}</span>

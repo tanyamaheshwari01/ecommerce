@@ -12,7 +12,7 @@ export async function getProducts(): Promise<Product[]> {
   return res.json();
 }
 export async function getProductById(id: number) {
-  const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+  const res = await fetch(`${BASE_URL}/products/${id}`);
   if (!res.ok) throw new Error("Failed to fetch product");
   return res.json();
 }
