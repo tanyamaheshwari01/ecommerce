@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function HeroBanner() {
   return (
     // Main banner container
@@ -34,12 +36,13 @@ export default function HeroBanner() {
         </button>
       </div>
 
-      {/* Sale icon image */}
-      <img
+      <Image
         src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
         alt="sale"
-        height={140}
+        height={130}
+        width={130}
       />
+
     </div>
   );
 }
