@@ -27,20 +27,6 @@ export default function Navbar() {
     >
       <h2 style={{ color: "#120c3f" }}>🛍️ ShopEase</h2>
 
-      {/* Search input */}
-      {/* <input
-        placeholder="Search products..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: "45%",
-          padding: "12px 18px",
-          borderRadius: "999px",
-          border: "1px solid #e5e7eb",
-          outline: "none",
-          fontSize: "15px",
-        }}
-      /> */}
 
       {/* Cart button with item count */}
       <div style={{ display: "flex", gap: 20 }}>
