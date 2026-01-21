@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import { getProductById } from "@/lib/api";
 import { Product } from "@/types/product";
 import { useCart } from "@/context/CartContext";
@@ -43,9 +44,12 @@ export default function ProductDetailsPage() {
           marginBottom: "30px",
         }}
       >
-        <img
+        <Image
+        loading="eager"
           src={product.image}
           alt={product.title}
+          width={400}
+          height={400}
           style={{
             maxHeight: "100%",
             maxWidth: "100%",
@@ -54,7 +58,6 @@ export default function ProductDetailsPage() {
         />
       </div>
 
-      {/* DETAILS BELOW */}
       <h1 style={{ fontSize: "28px", marginBottom: "10px" }}>
         {product.title}
       </h1>
