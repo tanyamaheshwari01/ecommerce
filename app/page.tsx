@@ -11,14 +11,30 @@ import { useSearch } from "@/context/SearchContext";
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { search } = useSearch();
 
+  // FETCH PRODUCTS
   useEffect(() => {
-    getProducts().then(setProducts);
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const data = await getProducts();
+        setProducts(data);
+      } catch (err) {
+        setError("Failed to load products. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -27,8 +43,12 @@ export default function HomePage() {
     }
   }, [search, category, sort]);
 
-  const categories = Array.from(new Set(products.map((p) => p.category)));
+  // Categories
+  const categories = Array.from(
+    new Set(products.map((p) => p.category))
+  );
 
+  // FILTER
   let filtered = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -37,10 +57,38 @@ export default function HomePage() {
     filtered = filtered.filter((p) => p.category === category);
   }
 
-  if (sort === "price-asc") filtered.sort((a, b) => a.price - b.price);
-  if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
-  if (sort === "rating-desc")
-    filtered.sort((a, b) => b.rating.rate - a.rating.rate);
+  // SORT 
+  const sorted = [...filtered];
+
+  if (sort === "price-asc") {
+    sorted.sort((a, b) => a.price - b.price);
+  }
+
+  if (sort === "price-desc") {
+    sorted.sort((a, b) => b.price - a.price);
+  }
+
+  if (sort === "rating-desc") {
+    sorted.sort((a, b) => b.rating.rate - a.rating.rate);
+  }
+
+  // LOADING STATE
+  if (loading) {
+    return (
+      <div style={{ padding: "80px", textAlign: "center" }}>
+        <h3>Loading products...</h3>
+      </div>
+    );
+  }
+
+  // ERROR STATE
+  if (error) {
+    return (
+      <div style={{ padding: "80px", textAlign: "center", color: "red" }}>
+        <h3>{error}</h3>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -50,6 +98,7 @@ export default function HomePage() {
         margin: "0 auto",
       }}
     >
+      {/* HEADER */}
       <h1 style={{ marginTop: "24px" }}>Discover Products</h1>
       <p style={{ marginBottom: "24px", color: "#555" }}>
         Browse our curated collection of quality products
@@ -57,6 +106,7 @@ export default function HomePage() {
 
       <HeroBanner />
 
+      {/* FILTERS */}
       <FilterBar
         categories={categories}
         category={category}
@@ -65,15 +115,17 @@ export default function HomePage() {
         setSort={setSort}
       />
 
+      {/* PRODUCTS GRID */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: 24,
-          marginTop: "24px",
-        }}
-      >
-        {hasInteracted && filtered.length === 0 ? (
+    style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+    gap: "56px",          
+    marginTop: "32px",
+    marginBottom: "40px",
+  }}
+>
+        {hasInteracted && sorted.length === 0 ? (
           <div
             style={{
               gridColumn: "1 / -1",
@@ -82,11 +134,11 @@ export default function HomePage() {
               color: "#555",
             }}
           >
-            <h3 style={{ marginBottom: "8px" }}>No products found</h3>
+            <h3>No products found</h3>
             <p>Try a different search or clear filters</p>
           </div>
         ) : (
-          filtered.map((p) => <ProductCard key={p.id} product={p} />)
+          sorted.map((p) => <ProductCard key={p.id} product={p} />)
         )}
       </div>
     </div>

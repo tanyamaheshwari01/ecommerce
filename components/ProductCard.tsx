@@ -20,12 +20,12 @@ export default function ProductCard({ product }: Props) {
       style={{
         background: "#fff",
         borderRadius: "16px",
-        padding: "16px",
+        padding: "10px",
         boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
         display: "flex",
         flexDirection: "column",
-        height: "100%",
         overflow: "hidden",
+
       }}
     >
       <div
@@ -41,16 +41,11 @@ export default function ProductCard({ product }: Props) {
         }}
       >
         <Image
-          loading="eager"
-          width={200}
-          height={200}
+          width={160}
+          height={160}
           src={product.image}
           alt={product.title}
-          style={{
-            maxHeight: "auto",
-            maxWidth: "auto",
-            objectFit: "contain",
-          }}
+          style={{ objectFit: "contain" }}
         />
       </div>
 
@@ -99,7 +94,7 @@ export default function ProductCard({ product }: Props) {
       </div>
 
       {/* CART */}
-      <div style={{ marginTop: "12px" }}>
+      <div style={{ marginTop: "8px" }}>
         {quantity === 0 ? (
           <button
             onClick={() => addToCart(product)}
@@ -119,12 +114,13 @@ export default function ProductCard({ product }: Props) {
         ) : (
           <div
             style={{
-              height: "48px",
+              height: "40px",
+              fontSize: "14px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               border: "1px solid #ddd",
-              borderRadius: "12px",
+              borderRadius: "10px",
               padding: "0 14px",
             }}
           >
