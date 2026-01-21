@@ -38,6 +38,7 @@ export default function HeroBanner() {
       </div>
 
       <Image
+      loading="eager"
         src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
         alt="sale"
         height={130}

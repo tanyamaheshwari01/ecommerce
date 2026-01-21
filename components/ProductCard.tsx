@@ -28,10 +28,9 @@ export default function ProductCard({ product }: Props) {
         overflow: "hidden",
       }}
     >
-      {/* IMAGE */}
       <div
         style={{
-          height: "180px",
+          height: "auto",
           minHeight: "180px",
           maxHeight: "180px",
           display: "flex",
@@ -42,13 +41,14 @@ export default function ProductCard({ product }: Props) {
         }}
       >
         <Image
+          loading="eager"
           width={200}
           height={200}
           src={product.image}
           alt={product.title}
           style={{
-            maxHeight: "160px",
-            maxWidth: "100%",
+            maxHeight: "auto",
+            maxWidth: "auto",
             objectFit: "contain",
           }}
         />

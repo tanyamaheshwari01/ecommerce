@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,28 +13,30 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const { search } = useSearch();
 
-  // Fetch products 
   useEffect(() => {
     getProducts().then(setProducts);
   }, []);
 
-  // categories from products
+  useEffect(() => {
+    if (search || category || sort) {
+      setHasInteracted(true);
+    }
+  }, [search, category, sort]);
+
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
-  // Filter products by search query
   let filtered = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Apply category filter
   if (category) {
     filtered = filtered.filter((p) => p.category === category);
   }
 
-  // Apply sorting
   if (sort === "price-asc") filtered.sort((a, b) => a.price - b.price);
   if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
   if (sort === "rating-desc")
@@ -52,10 +55,8 @@ export default function HomePage() {
         Browse our curated collection of quality products
       </p>
 
-      {/* Hero banner section */}
       <HeroBanner />
 
-      {/* Filter controls */}
       <FilterBar
         categories={categories}
         category={category}
@@ -64,7 +65,6 @@ export default function HomePage() {
         setSort={setSort}
       />
 
-      {/* Product grid */}
       <div
         style={{
           display: "grid",
@@ -73,7 +73,7 @@ export default function HomePage() {
           marginTop: "24px",
         }}
       >
-        {filtered.length === 0 ? (
+        {hasInteracted && filtered.length === 0 ? (
           <div
             style={{
               gridColumn: "1 / -1",
