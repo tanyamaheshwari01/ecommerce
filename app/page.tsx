@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -27,7 +26,7 @@ export default function HomePage() {
         setLoading(true);
         const data = await getProducts();
         setProducts(data);
-      } catch (err) {
+      } catch {
         setError("Failed to load products. Please try again.");
       } finally {
         setLoading(false);
