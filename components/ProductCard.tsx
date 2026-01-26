@@ -15,137 +15,160 @@ export default function ProductCard({ product }: Props) {
   const cartItem = cart.find((item) => item.id === product.id);
   const quantity = cartItem?.quantity || 0;
 
+  const ratingValue = typeof product.rating === 'number' ? product.rating : 0;
+
   return (
     <div
       style={{
         background: "#fff",
-        borderRadius: "16px",
-        padding: "10px",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
+        borderRadius: "12px",
+        padding: "0px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-
+        border: "1px solid #f0f0f0",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        cursor: "pointer",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-5px)";
+        e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.12)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)";
       }}
     >
-      <div
-        style={{
-          height: "auto",
-          minHeight: "180px",
-          maxHeight: "180px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "12px",
-          overflow: "hidden",
-        }}
-      >
-        <Image
-          width={160}
-          height={160}
-          src={product.image}
-          alt={product.title}
-          style={{ objectFit: "contain" }}
-        />
-      </div>
-
-      {/* CONTENT */}
-      <div style={{ flexGrow: 1 }}>
-        <h3
+      <Link href={`/product/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+        <div
           style={{
+            height: "220px",
+            background: "#f8f8f8",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            padding: "20px"
+          }}
+        >
+          <Image
+            src={product.thumbnail}
+            alt={product.title}
+            width={200}
+            height={200}
+            style={{ objectFit: "contain", mixBlendMode: "multiply" }}
+          />
+          {product.discountPercentage && (
+            <span style={{
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              background: "#ff4757",
+              color: "#fff",
+              padding: "2px 8px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontWeight: "bold"
+            }}>
+              {Math.round(product.discountPercentage)}% OFF
+            </span>
+          )}
+        </div>
+
+        <div style={{ padding: "15px", flexGrow: 1 }}>
+          <p style={{ 
+            fontSize: "12px", 
+            color: "#888", 
+            textTransform: "uppercase", 
+            marginBottom: "4px",
+            fontWeight: 600 
+          }}>
+            {product.category.replace(/-/g, ' ')}
+          </p>
+          
+          <h3 style={{
             fontSize: "15px",
             fontWeight: 600,
-            marginBottom: "6px",
+            color: "#2d3436",
+            marginBottom: "8px",
+            height: "40px",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
-          }}
-        >
-          {product.title}
-        </h3>
+            lineHeight: "1.4"
+          }}>
+            {product.title}
+          </h3>
 
-        {/* PRICE */}
-        <p style={{ fontSize: "16px", fontWeight: 700 }}>₹ {product.price}</p>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+             <div style={{
+               display: "flex",
+               alignItems: "center",
+               background: "#26a541",
+               color: "#fff",
+               padding: "2px 6px",
+               borderRadius: "4px",
+               fontSize: "12px",
+               fontWeight: "bold"
+             }}>
+               {ratingValue} <span style={{ marginLeft: "2px" }}>★</span>
+             </div>
+             <span style={{ fontSize: "12px", color: "#888" }}>(Stock: {product.stock})</span>
+          </div>
 
-        {/* RATING */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            margin: "6px 0",
-          }}
-        >
-          <span style={{ color: "#facc15" }}>⭐</span>
-          <span style={{ fontSize: "14px" }}>{product.rating.rate}</span>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+            <span style={{ fontSize: "20px", fontWeight: "bold", color: "#2d3436" }}>
+              ${product.price}
+            </span>
+          </div>
         </div>
+      </Link>
 
-        <Link
-          href={`/product/${product.id}`}
-          style={{
-            fontSize: "14px",
-            color: "#6C5CE7",
-            textDecoration: "none",
-          }}
-        >
-          View details
-        </Link>
-      </div>
-
-      {/* CART */}
-      <div style={{ marginTop: "8px" }}>
+      <div style={{ padding: "15px", paddingTop: "0" }}>
         {quantity === 0 ? (
           <button
             onClick={() => addToCart(product)}
             style={{
               width: "100%",
-              height: "48px",
-              background: "#09052b",
+              height: "42px",
+              background: "#0d0842",
               color: "#fff",
               border: "none",
-              borderRadius: "12px",
+              borderRadius: "8px",
               cursor: "pointer",
-              fontSize: "15px",
+              fontSize: "14px",
+              fontWeight: "600",
+              transition: "background 0.2s"
             }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "#000"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "#2d3436"}
           >
-            Add to Cart
+            Add to Bag
           </button>
         ) : (
           <div
             style={{
-              height: "40px",
-              fontSize: "14px",
+              height: "42px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              padding: "0 14px",
+              border: "2px solid #2d3436",
+              borderRadius: "8px",
+              padding: "0 5px",
             }}
           >
             <button
               onClick={() => decreaseQty(product.id)}
-              style={{
-                border: "none",
-                background: "transparent",
-                fontSize: "22px",
-                cursor: "pointer",
-              }}
+              style={{ border: "none", background: "none", fontSize: "24px", cursor: "pointer", width: "40px" }}
             >
               -
             </button>
-
-            <span style={{ fontWeight: 600 }}>{quantity}</span>
-
+            <span style={{ fontWeight: "bold", fontSize: "16px" }}>{quantity}</span>
             <button
               onClick={() => increaseQty(product.id)}
-              style={{
-                border: "none",
-                background: "transparent",
-                fontSize: "22px",
-                cursor: "pointer",
-              }}
+              style={{ border: "none", background: "none", fontSize: "24px", cursor: "pointer", width: "40px" }}
             >
               +
             </button>

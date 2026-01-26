@@ -1,145 +1,142 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useState } from "react";
-import { getProducts } from "@/lib/api";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { fetchProducts } from "@/lib/api"; 
 import { Product } from "@/types/product";
 import ProductCard from "@/components/ProductCard";
 import HeroBanner from "@/components/HeroBanner";
 import FilterBar from "@/components/FilterBar";
-import { useSearch } from "@/context/SearchContext";
 
 export default function HomePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const searchQuery = searchParams.get("search") || "";
+  const categoryQuery = searchParams.get("category") || "";
+  const sortQuery = searchParams.get("sort") || "";
+
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
-  const [category, setCategory] = useState("");
-  const [sort, setSort] = useState("");
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const loadProducts = useCallback(async (reset = false) => {
+    if (loading || (!hasMore && !reset)) return;
 
-  const { search } = useSearch();
+    setLoading(true);
+    try {
+      const currentOffset = reset ? 0 : offset;
+      const data = await fetchProducts({
+        limit: 20,
+        skip: currentOffset,
+        category: categoryQuery,
+        search: searchQuery,
+      });
 
-  // FETCH PRODUCTS
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        setLoading(true);
-        const data = await getProducts();
-        setProducts(data);
-      } catch {
-        setError("Failed to load products. Please try again.");
-      } finally {
-        setLoading(false);
+      if (!data.products || data.products.length === 0) {
+        setHasMore(false);
+        if (reset) setProducts([]); 
+        return;
       }
-    }
 
-    fetchProducts();
-  }, []);
+      setProducts((prev) => (reset ? data.products : [...prev, ...data.products]));
+      setOffset(reset ? 20 : currentOffset + 20);
+      setHasMore(data.products.length === 20);
+      
+    } catch (err) {
+      console.error(err);
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, offset, searchQuery, categoryQuery]);
 
   useEffect(() => {
-    if (search || category || sort) {
-      setHasInteracted(true);
-    }
-  }, [search, category, sort]);
+    setHasMore(true); 
+    loadProducts(true);
+  }, [searchQuery]);
 
-  // Categories
-  const categories = Array.from(
-    new Set(products.map((p) => p.category))
-  );
-
-  // FILTER
-  let filtered = products.filter((p) =>
-    p.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  if (category) {
-    filtered = filtered.filter((p) => p.category === category);
-  }
-
-  // SORT 
-  const sorted = [...filtered];
-
-  if (sort === "price-asc") {
-    sorted.sort((a, b) => a.price - b.price);
-  }
-
-  if (sort === "price-desc") {
-    sorted.sort((a, b) => b.price - a.price);
-  }
-
-  if (sort === "rating-desc") {
-    sorted.sort((a, b) => b.rating.rate - a.rating.rate);
-  }
-
-  // LOADING STATE
-  if (loading) {
-    return (
-      <div style={{ padding: "80px", textAlign: "center" }}>
-        <h3>Loading products...</h3>
-      </div>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadProducts();
+        }
+      },
+      { threshold: 0.1 }
     );
-  }
 
-  // ERROR STATE
-  if (error) {
-    return (
-      <div style={{ padding: "80px", textAlign: "center", color: "red" }}>
-        <h3>{error}</h3>
-      </div>
-    );
-  }
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [loadProducts, hasMore, loading]);
+
+  const sortedProducts = [...products].sort((a, b) => {
+    const rateA = typeof a.rating === 'number' ? a.rating : 0;
+    const rateB = typeof b.rating === 'number' ? b.rating : 0;
+
+    if (sortQuery === "price-asc") return a.price - b.price;
+    if (sortQuery === "price-desc") return b.price - a.price;
+    if (sortQuery === "rating-desc") return rateB - rateA;
+    return 0;
+  });
+
+  const handleFilterChange = (cat: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (cat) params.set("category", cat); else params.delete("category");
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
+  const handleSortChange = (val: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (val) params.set("sort", val); else params.delete("sort");
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
-    <div
-      style={{
-        padding: "0 40px",
-        maxWidth: "1280px",
-        margin: "0 auto",
-      }}
-    >
-      {/* HEADER */}
-      <h1 style={{ marginTop: "24px" }}>Discover Products</h1>
-      <p style={{ marginBottom: "24px", color: "#555" }}>
-        Browse our curated collection of quality products
-      </p>
-
+    <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
       <HeroBanner />
-
-      {/* FILTERS */}
-      <FilterBar
-        categories={categories}
-        category={category}
-        sort={sort}
-        setCategory={setCategory}
-        setSort={setSort}
-      />
-
-      {/* PRODUCTS GRID */}
-      <div
-    style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-    gap: "56px",          
-    marginTop: "32px",
-    marginBottom: "40px",
-  }}
->
-        {hasInteracted && sorted.length === 0 ? (
-          <div
-            style={{
-              gridColumn: "1 / -1",
-              textAlign: "center",
-              padding: "60px 0",
-              color: "#555",
-            }}
-          >
-            <h3>No products found</h3>
-            <p>Try a different search or clear filters</p>
-          </div>
-        ) : (
-          sorted.map((p) => <ProductCard key={p.id} product={p} />)
-        )}
+      
+      <div style={{ marginTop: "40px" }}>
+        <h1 style={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+          {categoryQuery ? `Category: ${categoryQuery}` : "Discover Products"}
+        </h1>
+        
+        <FilterBar
+          category={categoryQuery}
+          sort={sortQuery}
+          setCategory={handleFilterChange}
+          setSort={handleSortChange}
+        />
       </div>
-    </div>
+
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+        gap: "25px",
+        marginTop: "20px"
+      }}>
+        {sortedProducts.map((p, idx) => (
+          <ProductCard key={`${p.id}-${idx}`} product={p} />
+        ))}
+      </div>
+
+      {loading && (
+        <div style={{ textAlign: "center", padding: "30px" }}>
+          <p>Loading...</p>
+        </div>
+      )}
+
+      {!loading && sortedProducts.length === 0 && (
+        <div style={{ textAlign: "center", padding: "80px", color: "#888" }}>
+          <h2>No products found</h2>
+          <p>Try searching for something else.</p>
+        </div>
+      )}
+
+      {hasMore && <div ref={loaderRef} style={{ height: "20px" }} />}
+    </main>
   );
 }

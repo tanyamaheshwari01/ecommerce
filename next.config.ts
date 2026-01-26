@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: "cdn-icons-png.flaticon.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.dummyjson.com",
+        pathname: "/**",
+      },
     ],
   },
 };

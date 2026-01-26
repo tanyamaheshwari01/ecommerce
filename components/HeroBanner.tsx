@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function HeroBanner() {
   return (
-    // Main banner container
+
     <div
       style={{
         margin: "30px 0",
@@ -15,16 +15,15 @@ export default function HeroBanner() {
         alignItems: "center",
       }}
     >
-      {/* Text content section */}
+
       <div>
         <h1>Big Savings Day 🎉</h1>
         <p>
           Up to <b>50% OFF</b> on top products
         </p>
 
-        {/* shop now button */}
         <button
-        suppressHydrationWarning
+          suppressHydrationWarning
           style={{
             marginTop: 20,
             padding: "10px 20px",
@@ -38,7 +37,7 @@ export default function HeroBanner() {
       </div>
 
       <Image
-      loading="eager"
+        loading="eager"
         src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
         alt="sale"
         height={130}

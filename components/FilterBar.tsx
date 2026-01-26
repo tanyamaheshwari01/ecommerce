@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
-  categories: string[];
   category: string;
   sort: string;
   setCategory: (value: string) => void;
@@ -12,19 +12,29 @@ type FilterBarProps = {
 };
 
 export default function FilterBar({
-  categories,
   category,
   sort,
   setCategory,
   setSort,
 }: FilterBarProps) {
+  const [categoriesList, setCategoriesList] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    async function getCategories() {
+      try {
+        const res = await fetch("https://dummyjson.com/products/categories");
+        const data = await res.json();
+        const names = data.map((item: any) => typeof item === 'string' ? item : item.slug);
+        setCategoriesList(names);
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
+      }
+    }
+    getCategories();
   }, []);
 
-  // Prevent hydration mismatch
   if (!mounted) return null;
 
   return (
@@ -33,42 +43,46 @@ export default function FilterBar({
         display: "flex",
         justifyContent: "space-between",
         margin: "30px 0",
+        gap: "10px",
+        flexWrap: "wrap"
       }}
     >
-      {/* Category filter dropdown */}
       <select
-        suppressHydrationWarning
         value={category}
         onChange={(e) => setCategory(e.target.value)}
         style={{
           padding: "10px 14px",
-          borderRadius: "999px",
+          borderRadius: "8px",
           border: "1px solid #ddd",
+          backgroundColor: "#fff",
+          cursor: "pointer",
+          minWidth: "150px"
         }}
       >
         <option value="">All Categories</option>
-        {categories.map((cat) => (
+        {categoriesList.map((cat) => (
           <option key={cat} value={cat}>
-            {cat}
+            {cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ')}
           </option>
         ))}
       </select>
 
-      {/* Sort options dropdown */}
       <select
-        suppressHydrationWarning
         value={sort}
         onChange={(e) => setSort(e.target.value)}
         style={{
           padding: "10px 14px",
-          borderRadius: "999px",
+          borderRadius: "8px",
           border: "1px solid #ddd",
+          backgroundColor: "#fff",
+          cursor: "pointer",
+          minWidth: "150px"
         }}
       >
-        <option value="">Sort By</option>
+        <option value="">Sort By: Default</option>
         <option value="price-asc">Price: Low to High</option>
         <option value="price-desc">Price: High to Low</option>
-        <option value="rating-desc">Rating</option>
+        <option value="rating-desc">Highest Rated</option>
       </select>
     </div>
   );

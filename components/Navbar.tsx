@@ -1,14 +1,44 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import { useEffect} from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useSearch } from "@/context/SearchContext";
 
 export default function Navbar() {
   const { cart } = useCart();
   const { search, setSearch } = useSearch();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const totalQty = cart?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+
+  useEffect(() => {
+    const query = searchParams.get("search");
+    if (query) setSearch(query);
+  }, []); 
+
+  // 2. Search Debouncing logic
+  useEffect(() => {
+    if (!search && !searchParams.get("search")) return;
+
+    const delayDebounceFn = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      
+      if (search) {
+        params.set("search", search);
+      } else {
+        params.delete("search");
+      }
+
+      router.push(`/?${params.toString()}`, { scroll: false });
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+
+  }, [search, router]); 
 
   return (
     <header
@@ -24,10 +54,11 @@ export default function Navbar() {
         zIndex: 10,
       }}
     >
-      <h2 style={{ color: "#120c3f" }}>🛍️ ShopEase</h2>
+      <Link href="/" style={{ textDecoration: "none" }}>
+        <h2 style={{ color: "#120c3f", margin: 0 }}>🛍️ ShopEase</h2>
+      </Link>
 
       <input
-        suppressHydrationWarning
         placeholder="Search products..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
