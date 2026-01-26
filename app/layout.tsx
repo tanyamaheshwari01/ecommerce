@@ -1,9 +1,5 @@
-"use client";
-
-import { Suspense } from "react";
-import Navbar from "@/components/Navbar";
-import { CartProvider } from "@/context/CartContext";
-import { SearchProvider } from "@/context/SearchContext";
+import "./globals.css";
+import Providers from "./providers";
 
 export default function RootLayout({
   children,
@@ -13,15 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <CartProvider>
-          <SearchProvider>
-            <Navbar />
-
-            <Suspense fallback={<div className="p-20 text-center">Loading...</div>}>
-              {children}
-            </Suspense>
-          </SearchProvider>
-        </CartProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
